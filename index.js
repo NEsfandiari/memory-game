@@ -91,15 +91,17 @@ var prevFlip= {
   img: '',
 };
 
-
 function flip(){
-//   Test card is matched or the same card - dont do anything
+ 
+//   Test card is not matched or the same card
   if(this.getAttribute('name') !== 'matched' && this.id !== prevFlip.id){
     count++
     document.querySelector('#count').innerHTML = `Count: ${count}`
     this.classList.toggle('flipped')
     this.setAttribute('name', 'showing');
-    
+    for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.toggle('avoid-clicks')
+    }
 //    Test if its a 2nd click
     if(count % 2 === 0 && count !== 0){
 //       Test if cards are equal
@@ -108,12 +110,13 @@ function flip(){
           lock()
         }
       }
-      else {setTimeout(flipBack, 900);}
+      else {setTimeout(flipBack, 1000);}
    }
 //   1st click  
     else {
       prevFlip.img = this.childNodes[1].getAttribute('src');
       prevFlip.id = this.id;
+      unlock()
     }
   }
 }
@@ -127,6 +130,13 @@ function flipBack(){
     prevFlip.id = 0
   }
  }
+ unlock()
+}
+
+function unlock(){
+  for (var i = 0; i < cards.length; i++) {
+      cards[i].classList.toggle('avoid-clicks')
+  }
 }
 
 function lock(){
@@ -147,6 +157,7 @@ function lock(){
     removeChildren();
     game.appendChild(winState)
   }
+  unlock()
 }
 
 function testVictory(){
@@ -158,4 +169,3 @@ function testVictory(){
 }
 
 
- 
